@@ -4,6 +4,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { use } from "react";
+import { motion } from "framer-motion";
+
 interface client {
   _id: string;
   name: string;
@@ -19,7 +21,7 @@ const EditClientPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const getSingleClient = async (id: string) => {
     try {
       const res = await axios.get(`/api/clients/${id}`);
-      setSingleClient(res.data.singleClient)
+      setSingleClient(res.data.singleClient);
     } catch (error) {
       console.error("Failed to fetch case:", error);
     } finally {
@@ -46,17 +48,23 @@ const EditClientPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const { _id, name, email, phone, address } = singleClient || {};
 
   return (
-    <div>
-      {singleClient && (
-        <EditClient
-          _id={_id || ""}
-          address={address || ""}
-          email={email || ""}
-          name={name || ""}
-          phone={phone || ""}
-        />
-      )}
-    </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div>
+        {singleClient && (
+          <EditClient
+            _id={_id || ""}
+            address={address || ""}
+            email={email || ""}
+            name={name || ""}
+            phone={phone || ""}
+          />
+        )}
+      </div>
+    </motion.div>
   );
 };
 

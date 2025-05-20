@@ -15,6 +15,7 @@ import { FaPenToSquare } from "react-icons/fa6";
 import Link from "next/link";
 import axios from "axios";
 import RemoveItem from "@/components/layout/RemoveCase";
+import { motion } from "framer-motion";
 
 interface Case {
   _id: string;
@@ -67,7 +68,7 @@ function All_Cases() {
   }, [searchQuery]);
 
   if (isLoading) {
-    return <div className="text-center p-5 text-gray-500">جارٍ تحميل البيانات...</div>;
+    return <div className="text-center p-5 text-black">جارٍ تحميل البيانات...</div>;
   }
 
   const handleDelete = () => {
@@ -75,6 +76,13 @@ function All_Cases() {
   };
 
   return (
+       <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+
+   
     <div>
       <div className="m-2">
         <input
@@ -146,6 +154,7 @@ function All_Cases() {
         </TableBody>
       </Table>
     </div>
+     </motion.div>
   );
 }
 

@@ -16,6 +16,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaPenToSquare } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 interface client {
   _id: string;
@@ -57,49 +58,66 @@ export default function Clients() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSearch} className="m-5 flex gap-2 justify-center items-center">
-        <input
-          type="search"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className={
-            "w-[150px] border-2 border-violet-400 md:w-[300px] lg:w-[400px] rounded-lg outline-none h-[40px] p-3"
-          }
-          placeholder="ابحث عن موكل "
-        />
-        <Button type="submit" variant={"destructive"} >Search</Button>
-      </form>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div>
+        <form
+          onSubmit={handleSearch}
+          className="m-5 flex gap-2 justify-center items-center"
+        >
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className={
+              "w-[150px] border-2 border-violet-400 md:w-[300px] lg:w-[400px] rounded-lg outline-none h-[40px] p-3"
+            }
+            placeholder="ابحث عن موكل "
+          />
+          <Button type="submit" variant={"destructive"}>
+            Search
+          </Button>
+        </form>
 
-      <Table className="text-center">
-        <TableCaption className="text-black">A list of your clients ({clients.length})</TableCaption>
-        <TableHeader className="text-center">
-          <TableRow>
-            <TableHead className="text-center text-black">الموكل</TableHead>
-            <TableHead className="text-center text-black">عدد القضايا</TableHead>
-            <TableHead className="text-center text-black">تعديل او حذف</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {clients.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{item.caseCount}</TableCell>
-              <TableCell className="flex justify-center items-center gap-4">
-                <DeleteClientButton
-                  clientId={item._id}
-                  onDelete={handleDelete}
-                />
-                <Button>
-                  <Link href={`/client/edit-client/${item?._id}`}>
-                    <FaPenToSquare />
-                  </Link>
-                </Button>
-              </TableCell>
+        <Table className="text-center">
+          <TableCaption className="text-black">
+            A list of your clients ({clients.length})
+          </TableCaption>
+          <TableHeader className="text-center">
+            <TableRow>
+              <TableHead className="text-center text-black">الموكل</TableHead>
+              <TableHead className="text-center text-black">
+                عدد القضايا
+              </TableHead>
+              <TableHead className="text-center text-black">
+                تعديل او حذف
+              </TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {clients.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>{item.caseCount}</TableCell>
+                <TableCell className="flex justify-center items-center gap-4">
+                  <DeleteClientButton
+                    clientId={item._id}
+                    onDelete={handleDelete}
+                  />
+                  <Button>
+                    <Link href={`/client/edit-client/${item?._id}`}>
+                      <FaPenToSquare />
+                    </Link>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </motion.div>
   );
 }

@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 function AddClient() {
   const router = useRouter();
@@ -51,60 +52,66 @@ function AddClient() {
   };
 
   return (
-    <div className="w-full lg:w-full h-[400px] items-center overflow-hidden flex justify-center">
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-[400px] bg-white flex flex-col p-4 gap-4 justify-center overflow-hidden items-center text-center rounded-2xl shadow-lg shadow-black"
-      >
-        <div>
-          <label>اسم الموكل :</label>
-          <Input
-            type="text"
-            name="name"
-            onChange={handleOnChange}
-            value={data.name}
-            placeholder="ادخل اسم الموكل"
-          />
-        </div>
-        <div>
-          <label>رقم تليفون الموكل :</label>
-          <Input
-            type="text"
-            value={data.phone}
-            onChange={handleOnChange}
-            name="phone"
-            placeholder="ادخل رقم تليفون الموكل"
-          />
-        </div>
-        <div>
-          <label>عنوان الموكل :</label>
-          <Input
-            type="text"
-            name="address"
-            value={data.address}
-            onChange={handleOnChange}
-            placeholder="ادخل عنوان الموكل"
-          />
-        </div>
-        <div>
-          <label>ايميل الموكل :</label>
-          <Input
-            type="email"
-            value={data.email}
-            name="email"
-            onChange={handleOnChange}
-            placeholder="ادخل ايميل الموكل"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="w-full lg:w-full h-[400px] items-center overflow-hidden flex justify-center">
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-[400px] bg-white flex flex-col p-4 gap-4 justify-center overflow-hidden items-center text-center rounded-2xl shadow-lg shadow-black"
         >
-          إضافة موكل
-        </button>
-      </form>
-    </div>
+          <div>
+            <label>اسم الموكل :</label>
+            <Input
+              type="text"
+              name="name"
+              onChange={handleOnChange}
+              value={data.name}
+              placeholder="ادخل اسم الموكل"
+            />
+          </div>
+          <div>
+            <label>رقم تليفون الموكل :</label>
+            <Input
+              type="text"
+              value={data.phone}
+              onChange={handleOnChange}
+              name="phone"
+              placeholder="ادخل رقم تليفون الموكل"
+            />
+          </div>
+          <div>
+            <label>عنوان الموكل :</label>
+            <Input
+              type="text"
+              name="address"
+              value={data.address}
+              onChange={handleOnChange}
+              placeholder="ادخل عنوان الموكل"
+            />
+          </div>
+          <div>
+            <label>ايميل الموكل :</label>
+            <Input
+              type="email"
+              value={data.email}
+              name="email"
+              onChange={handleOnChange}
+              placeholder="ادخل ايميل الموكل"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+          >
+            إضافة موكل
+          </button>
+        </form>
+      </div>
+    </motion.div>
   );
 }
 

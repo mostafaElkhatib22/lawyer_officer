@@ -51,6 +51,7 @@
     "cloudinary": "^2.6.0",
     "clsx": "^2.1.1",
     "erp-system": "file:",
+    "framer-motion": "^12.12.1",
     "fs": "^0.0.2",
     "icons": "^1.0.0",
     "jsonwebtoken": "^9.0.2",

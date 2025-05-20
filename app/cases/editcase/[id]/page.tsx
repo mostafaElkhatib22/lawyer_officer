@@ -4,12 +4,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { use } from "react";
+import { motion } from "framer-motion";
 
 interface Case {
   _id: string;
   caseTypeOF: string;
   court: string;
-  type:string;
+  type: string;
   caseNumber: string; // تعديل النوع إلى number
   year: string; // تعديل النوع إلى number
   attorneyNumber: string;
@@ -72,26 +73,32 @@ const EditCasePage = ({ params }: { params: Promise<{ id: string }> }) => {
   } = singleCase || {};
 
   return (
-    <div>
-      {singleCase && (
-        <EditCaseForm
-          _id={_id || ""}
-          attorneyNumber={attorneyNumber || ""}
-          caseDate={caseDate || ""}
-          type={type||""}
-          sessiondate={sessiondate || ""}
-          client={client || { _id: "", name: "" }}
-          opponents={opponents || []}
-          files={files || []}
-          caseNumber={caseNumber || ""}
-          caseTypeOF={caseTypeOF || ""}
-          decision={decision || ""}
-          court={court || ""}
-          nots={nots || ""}
-          year={year || ""}
-        />
-      )}
-    </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div>
+        {singleCase && (
+          <EditCaseForm
+            _id={_id || ""}
+            attorneyNumber={attorneyNumber || ""}
+            caseDate={caseDate || ""}
+            type={type || ""}
+            sessiondate={sessiondate || ""}
+            client={client || { _id: "", name: "" }}
+            opponents={opponents || []}
+            files={files || []}
+            caseNumber={caseNumber || ""}
+            caseTypeOF={caseTypeOF || ""}
+            decision={decision || ""}
+            court={court || ""}
+            nots={nots || ""}
+            year={year || ""}
+          />
+        )}
+      </div>
+    </motion.div>
   );
 };
 

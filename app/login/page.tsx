@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 interface Login {
   email: string;
@@ -60,6 +61,12 @@ export default function SignIn() {
   };
 
   return (
+       <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+
     <section className="relative flex flex-wrap lg:h-screen lg:items-center">
       <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
         <div className="mx-auto max-w-lg text-center">
@@ -117,5 +124,7 @@ export default function SignIn() {
         </form>
       </div>
     </section>
+        </motion.div>
+
   );
 }

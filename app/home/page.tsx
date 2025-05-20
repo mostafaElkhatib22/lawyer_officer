@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { FaBalanceScale } from "react-icons/fa";
 import { RiCustomerService2Line } from "react-icons/ri";
 import { SiSession } from "react-icons/si";
-
+import { motion } from "framer-motion";
 interface Case {
   _id: string;
   caseTypeOF: string;
@@ -49,71 +49,76 @@ function HomePage() {
     fetchData("/api/clients", setClients);
   }, []);
   return (
-    <div className="flex flex-col justify-center items-center w-full">
-      <div className="flex flex-col justify-center items-center w-full h-screen">
-        <div className="flex justify-between items-center gap-6 w-full h-screen mb-4">
-          <div className="w-full h-screen flex justify-center items-center">
-            <img
-              src="https://res.cloudinary.com/dbtbxt0fj/image/upload/v1739993853/lawyer_office/ftxt9a8zudsp3dfz09hr.png"
-
-              alt="Logo Home"
-              className="w-full lg:w-full lg:h-screen"
-              loading="lazy"
-            />
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="flex flex-col justify-center items-center w-full">
+        <div className="flex flex-col justify-center items-center w-full h-screen">
+          <div className="flex justify-between items-center gap-6 w-full h-screen mb-4">
+            <div className="w-full h-screen flex justify-center items-center">
+              <img
+                src="https://res.cloudinary.com/dbtbxt0fj/image/upload/v1739993853/lawyer_office/ftxt9a8zudsp3dfz09hr.png"
+                alt="Logo Home"
+                className="w-full lg:w-full lg:h-screen"
+                loading="lazy"
+              />
+            </div>
+            <div className="flex flex-col justify-center items-center w-full h-screen">
+              <h1 className="text-[16px] md:text-4xl lg:text-6xl font-extrabold font-sans">
+                الاستاذ/ مصطفى الخطيب
+                <br />
+                الاستاذ/ السيد الشيشيني
+              </h1>
+              <p className="text-[16px] md:text-4xl lg:text-6xl font-extrabold font-sans">
+                للاستشارات القانونية{" "}
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col justify-center items-center w-full h-screen">
-            <h1 className="text-[16px] md:text-4xl lg:text-6xl font-extrabold font-sans">
-              الاستاذ/ مصطفى الخطيب
-              <br />
-              الاستاذ/ السيد الشيشيني
+        </div>
+        <div className="flex justify-between items-center gap-[20px] lg:gap-[100px] m-[20px]">
+          <div className="flex flex-col justify-center items-center hover:scale-[1.2] transition-all ease-linear">
+            <FaBalanceScale size={60} />
+            <h1 className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
+              {cases.length}
             </h1>
-            <p className="text-[16px] md:text-4xl lg:text-6xl font-extrabold font-sans">
-              للاستشارات القانونية{" "}
+            <p className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
+              عدد الدعاوي
+            </p>
+          </div>
+          <div className="flex flex-col justify-center items-center hover:scale-[1.2] transition-all ease-linear">
+            <RiCustomerService2Line size={60} />
+            <h1 className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
+              {clients.length}
+            </h1>
+            <p className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
+              عدد الموكلين
+            </p>
+          </div>
+          <div className="flex flex-col justify-center items-center hover:scale-[1.2] transition-all ease-linear">
+            <SiSession size={60} />
+            <h1 className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
+              {
+                cases.filter((e) => {
+                  const sessionDate = new Date(e.sessiondate);
+                  const tomorrow = new Date();
+                  tomorrow.setDate(tomorrow.getDate() + 1);
+                  return (
+                    sessionDate.getDate() === tomorrow.getDate() &&
+                    sessionDate.getMonth() === tomorrow.getMonth() &&
+                    sessionDate.getFullYear() === tomorrow.getFullYear()
+                  );
+                }).length
+              }
+            </h1>
+            <p className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
+              جلسات غدا
             </p>
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center gap-[20px] lg:gap-[100px] m-[20px]">
-        <div className="flex flex-col justify-center items-center hover:scale-[1.2] transition-all ease-linear">
-          <FaBalanceScale size={60} />
-          <h1 className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
-            {cases.length}
-          </h1>
-          <p className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
-            عدد الدعاوي
-          </p>
-        </div>
-        <div className="flex flex-col justify-center items-center hover:scale-[1.2] transition-all ease-linear">
-          <RiCustomerService2Line size={60} />
-          <h1 className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
-            {clients.length}
-          </h1>
-          <p className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
-            عدد الموكلين
-          </p>
-        </div>
-        <div className="flex flex-col justify-center items-center hover:scale-[1.2] transition-all ease-linear">
-          <SiSession size={60} />
-          <h1 className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
-            {
-              cases.filter((e) => {
-                const sessionDate = new Date(e.sessiondate);
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                return (
-                  sessionDate.getDate() === tomorrow.getDate() &&
-                  sessionDate.getMonth() === tomorrow.getMonth() &&
-                  sessionDate.getFullYear() === tomorrow.getFullYear()
-                );
-              }).length
-            }
-          </h1>
-          <p className="text-[13px] md:text-2xl lg:text-2xl font-semibold">
-            جلسات غدا
-          </p>
-        </div>
-      </div>
-    </div>
+    </motion.div>
   );
 }
 
