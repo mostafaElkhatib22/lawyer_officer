@@ -34,3 +34,35 @@ export default withAuth(
 export const config = {
   matcher: ["/:path*"],
 };
+// middleware.ts
+// import { NextRequest, NextResponse } from "next/server";
+// import jwt from "jsonwebtoken";
+
+// export function middleware(req: NextRequest) {
+//   const protectedPaths = ["/clients", "/cases", "/sessions"];
+//   const { pathname } = req.nextUrl;
+
+//   // لو المسار غير محمي، سيبه يكمل
+//   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
+//   if (!isProtected) return NextResponse.next();
+
+//   const authHeader = req.headers.get("authorization");
+//   const token = authHeader?.split(" ")[1]; // Bearer <token>
+
+//   if (!token) {
+//     return NextResponse.redirect(new URL("/login", req.url));
+//   }
+
+//   try {
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+//     // تقدر تضيف هنا معلومات المستخدم في الـ request لو حبيت
+//     return NextResponse.next();
+//   } catch (error) {
+//     console.error("Invalid token:", error);
+//     return NextResponse.redirect(new URL("/login", req.url));
+//   }
+// }
+
+// export const config = {
+//   matcher: ["/clients/:path*", "/cases/:path*", "/sessions/:path*"],
+// };
