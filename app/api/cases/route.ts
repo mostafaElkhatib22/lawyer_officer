@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
               { caseNumber: { $regex: searchQuery, $options: "i" } },
               { caseTypeOF: { $regex: searchQuery, $options: "i" } },
               { type: { $regex: searchQuery, $options: "i" } },
-              { attorneyNumberت: { $regex: searchQuery, $options: "i" } },
+              { attorneyNumber: { $regex: searchQuery, $options: "i" } },
               { client: { $in: clientIds } },
             ],
           }
