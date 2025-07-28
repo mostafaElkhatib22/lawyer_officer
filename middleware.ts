@@ -1,68 +1,52 @@
+import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
-export default withAuth(
-  async function middleware(req) {
-    // جلب الـ token مع التحقق من سرية  nextauth
-    const token = await getToken({
-      req,
-      secret: process.env.AUTH_SECRET,
-    });
-    // تضبيطات توضيح الـ token  لتتمكن من تتبع المشكلة الفعلية
-    console.log("token", token);
-    const isAuth = !!token; // التحقق لو فيه توكن موجودة
-    const isAuthPage = req.nextUrl.pathname.startsWith("/login");
+import jwt from "jsonwebtoken";
 
-    if (isAuthPage && isAuth) {
-      return NextResponse.redirect(new URL("/home", req.url));
-    }
-    if (!isAuth && !isAuthPage) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-    return NextResponse.next();
-  },
-  {
-    callbacks: {
-      async authorized() {
-        // This is a work-around for handling redirect on auth pages.
-        return true;
-      },
-    },
+export async function middleware(req: NextRequest) {
+  const protectedPaths = ["/clients", "/cases", "/sessions"];
+  const authPages = ["/login"];
+  const { pathname } = req.nextUrl;
+
+  const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
+  const isAuthPage = authPages.some((path) => pathname.startsWith(path));
+
+  let isAuth = false;
+
+  // 1. حاول تجيب التوكن من next-auth
+  const nextAuthToken = await getToken({ req, secret: process.env.AUTH_SECRET });
+  if (nextAuthToken) {
+    isAuth = true;
+    console.log("✅ NextAuth token found:", nextAuthToken);
   }
-);
+
+  // 2. لو مفيش توكن من next-auth، حاول من Authorization header
+  if (!isAuth) {
+    const authHeader = req.headers.get("authorization");
+    const token = authHeader?.split(" ")[1];
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+        isAuth = true;
+        console.log("✅ JWT token verified:", decoded);
+      } catch (error) {
+        console.error("❌ Invalid JWT token:", error);
+      }
+    }
+  }
+
+  // 🚫 مش مسجل دخول وبيحاول يدخل صفحة محمية
+  if (!isAuth && isProtected) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  // ✅ مسجل دخول ورايح صفحة login → نحوله على الصفحة الرئيسية
+  if (isAuth && isAuthPage) {
+    return NextResponse.redirect(new URL("/home", req.url));
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ["/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
-// middleware.ts
-// import { NextRequest, NextResponse } from "next/server";
-// import jwt from "jsonwebtoken";
-
-// export function middleware(req: NextRequest) {
-//   const protectedPaths = ["/clients", "/cases", "/sessions"];
-//   const { pathname } = req.nextUrl;
-
-//   // لو المسار غير محمي، سيبه يكمل
-//   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
-//   if (!isProtected) return NextResponse.next();
-
-//   const authHeader = req.headers.get("authorization");
-//   const token = authHeader?.split(" ")[1]; // Bearer <token>
-
-//   if (!token) {
-//     return NextResponse.redirect(new URL("/login", req.url));
-//   }
-
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-//     // تقدر تضيف هنا معلومات المستخدم في الـ request لو حبيت
-//     return NextResponse.next();
-//   } catch (error) {
-//     console.error("Invalid token:", error);
-//     return NextResponse.redirect(new URL("/login", req.url));
-//   }
-// }
-
-// export const config = {
-//   matcher: ["/clients/:path*", "/cases/:path*", "/sessions/:path*"],
-// };
