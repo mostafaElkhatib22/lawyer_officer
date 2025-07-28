@@ -3,12 +3,13 @@ import { getToken } from "next-auth/jwt";
 import jwt from "jsonwebtoken";
 
 export async function middleware(req: NextRequest) {
-  const protectedPaths = ["/clients", "/cases", "/sessions"];
+  const protectedPaths = ["/clients", "/cases", "/sessions", "/home"];
   const authPages = ["/login"];
   const { pathname } = req.nextUrl;
 
   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
   const isAuthPage = authPages.some((path) => pathname.startsWith(path));
+  const isRoot = pathname === "/";
 
   let isAuth = false;
 
@@ -34,14 +35,14 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // 🚫 مش مسجل دخول وبيحاول يدخل صفحة محمية
-  if (!isAuth && isProtected) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-
   // ✅ مسجل دخول ورايح صفحة login → نحوله على الصفحة الرئيسية
   if (isAuth && isAuthPage) {
     return NextResponse.redirect(new URL("/home", req.url));
+  }
+
+  // 🚫 مش مسجل دخول وبيحاول يدخل صفحة محمية
+  if (!isAuth && (isProtected || isRoot)) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   return NextResponse.next();
