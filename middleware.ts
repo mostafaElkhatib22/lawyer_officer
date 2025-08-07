@@ -14,7 +14,10 @@ export async function middleware(req: NextRequest) {
   let isAuth = false;
 
   // 1. حاول تجيب التوكن من next-auth
-  const nextAuthToken = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const nextAuthToken = await getToken({
+    req,
+    secret: process.env.AUTH_SECRET,
+  });
   if (nextAuthToken) {
     isAuth = true;
     console.log("✅ NextAuth token found:", nextAuthToken);
@@ -44,7 +47,9 @@ export async function middleware(req: NextRequest) {
   if (!isAuth && (isProtected || isRoot)) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
-
+  if (isAuth && pathname === "/login") {
+    return NextResponse.redirect(new URL("/home", req.url));
+  }
   return NextResponse.next();
 }
 
